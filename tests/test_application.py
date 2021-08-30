@@ -2,15 +2,14 @@ import sys
 sys.path.append("..")
 
 from framework.application import Application
-from framework.response import Text
+from framework.response import text, html
 
 app = Application()
 
 @app.route('/')
 def home(request):
-    response = Text('Home Page')
-    return response
+    return text('Home Page')
 
 @app.route('/hello/{username}')
 def hello(request):
-    return Text('Hello, %s' % request.path_params['username'])
+    return html('Hello, <strong>%s</strong>' % request.path_params['username'])

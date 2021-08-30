@@ -2,9 +2,9 @@ import typing
 import importlib
 import os
 
-from framework.registry import registry
 from framework.config import Config
 from framework.logging import logger
+from framework.registry import registry
 
 from starlette.datastructures import State, URLPath
 from starlette.exceptions import ExceptionMiddleware
@@ -229,8 +229,3 @@ class Application():
             return func
 
         return decorator
-
-class App(Application):
-    app_path = None
-    def __init__(self, debug: bool, routes: typing.Sequence[BaseRoute], middleware: typing.Sequence[Middleware], exception_handlers: typing.Dict[typing.Union[int, typing.Type[Exception]], typing.Callable], on_startup: typing.Sequence[typing.Callable], on_shutdown: typing.Sequence[typing.Callable], lifespan: typing.Callable[["Starlette"], typing.AsyncContextManager], config: Config) -> None:
-        super().__init__(debug=debug, routes=routes, middleware=middleware, exception_handlers=exception_handlers, on_startup=on_startup, on_shutdown=on_shutdown, lifespan=lifespan, config=config)
