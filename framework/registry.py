@@ -1,1 +1,3 @@
-registry = {}
+registry = {
+    'apps': {},
+}
