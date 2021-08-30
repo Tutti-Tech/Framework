@@ -1,41 +1,20 @@
-import typing
-import json
-from urllib.parse import quote
-from starlette.responses import Response, HTMLResponse, PlainTextResponse, JSONResponse, RedirectResponse, StreamingResponse, FileResponse
-from starlette.background import BackgroundTask
-from starlette.datastructures import URL
+from starlette.responses import Response, JSONResponse, FileResponse, RedirectResponse, StreamingResponse
 
 
-class HTML(Response):
-    media_type = "text/html"
+def html(content: str, status: int = 200) -> Response:
+    return Response(content=content, status_code=status, media_type='text/html')
 
+def text(content: str, status: int = 200) -> Response:
+    return Response(content=content, status_code=status, media_type='text/plain')
 
-class Text(Response):
-    media_type = "text/plain"
+def json(content: str, status: int = 200) -> Response:
+    return JSONResponse(content=content, status_code=status)
 
+def redirect(url: str, status: int = 200) -> Response:
+    return RedirectResponse(url=url, status_code=status)
 
-class JSON(Response):
-    media_type = "application/json"
+def file(path: str, filename: str = None, media_type: str = None) -> Response:
+    return FileResponse(path=path, media_type=media_type, filename=filename)
 
-    def render(self, content: typing.Any) -> bytes:
-        return json.dumps(
-            content,
-            ensure_ascii=False,
-            allow_nan=False,
-            indent=None,
-            separators=(",", ":"),
-        ).encode("utf-8")
-
-
-class Redirect(Response):
-    def __init__(
-        self,
-        url: typing.Union[str, URL],
-        status_code: int = 307,
-        headers: dict = None,
-        background: BackgroundTask = None,
-    ) -> None:
-        super().__init__(
-            content=b"", status_code=status_code, headers=headers, background=background
-        )
-        self.headers["location"] = quote(str(url), safe=":/%#?=@[]!$&'()*+,;")
+def streaming(content: str, status: int = 200) -> Response:
+    return StreamingResponse(content=content, status_code=status)
