@@ -5,13 +5,14 @@ import os
 from framework.config import Config
 from framework.logging import logger
 from framework.registry import registry
+from framework.routing import BaseRoute, Router, Mount
 
 from starlette.datastructures import State, URLPath
 from starlette.exceptions import ExceptionMiddleware
 from starlette.middleware import Middleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.errors import ServerErrorMiddleware
-from starlette.routing import BaseRoute, Router, Mount
+# from starlette.routing import BaseRoute, Router, Mount
 from starlette.types import ASGIApp, Receive, Scope, Send
 
 
@@ -90,10 +91,8 @@ class Application():
                     logger.info("Module '" + path[:-1] + '.' + app_id + "' has been loaded.")
                 except Exception as e:
                     logger.warn(e)
+                    # raise e
         return routes
-    
-    def config(self):
-        return self.config
 
     def build_middleware_stack(self) -> ASGIApp:
         debug = self.debug
