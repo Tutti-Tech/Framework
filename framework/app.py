@@ -1,15 +1,22 @@
 import typing
 from pathlib import Path
+
+from framework.config import Config
 from framework.registry import registry
-from starlette.routing import Route
+from framework.routing import Route, Mount
+
+from starlette.staticfiles import StaticFiles
+
 
 class App():
-    routes:typing.List[Route] = []
 
     def __init__(self, path) -> None:
         _path = Path(path)
         self.id = _path.parent.name
         self.path = str(_path.absolute().parent) + '/'
+        self.routes: typing.List[Route] = []
+        self.routes.append(Mount('/static', app=StaticFiles(directory=self.path+'templates/static', check_dir=False), name='static'))
+        self.config = Config('.config')
         self.registry = registry
         self.registry['apps'][self.id] = self
     
@@ -28,5 +35,6 @@ class App():
 
     def get_attribute(self, name):
         for route in self.routes:
-            if route.endpoint.__name__ == name:
+            # The type of route may be Mount or Route 
+            if 'endpoint' in route.__dict__ and route.endpoint.__name__ == name:
                 return route.endpoint
