@@ -18,11 +18,14 @@ class Templating():
     def _create_request_env(self, request: Request):
         self.env.globals["base_url"] = request.base_url
         self.env.globals["app_url"] = request.app_url
-        self.env.globals["static_url"] = request.url_for('static', path='/')
+        app_name = request.app_url.replace(str(request.base_url), '').rstrip('/')
+        self.env.globals["app_name"] = app_name
+        self.env.globals["static_url"] = request.url_for(app_name + '/static', path='/')
         self.env.globals["url_for"] = request.url_for
         return self.env
     
     def __call__(self, template_name: str, context: dict) -> None:
         template = self.env.get_template(template_name)
         content = template.render(context)
+        # TODO hook here to generate static html page
         return html(content)

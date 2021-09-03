@@ -83,12 +83,12 @@ class Application():
             if not path.endswith('/'): path += '/'
             if not os.path.isdir(path): continue
             app_list = os.listdir(path)
-            for app_id in app_list:
-                if not os.path.isfile(path + app_id + '/main.py'): continue
+            for app_name in app_list:
+                if not os.path.isfile(path + app_name + '/main.py'): continue
                 try:
-                    app_module = importlib.import_module(path[:-1] + '.' + app_id + '.main')
-                    routes.append(Mount('/' + app_id, routes=app_module.app.routes))
-                    logger.info("Module '" + path[:-1] + '.' + app_id + "' has been loaded.")
+                    app_module = importlib.import_module(path[:-1] + '.' + app_name + '.main')
+                    routes.append(Mount('/' + app_name, routes=app_module.app.routes))
+                    logger.info("Module '" + path[:-1] + '.' + app_name + "' has been loaded.")
                 except Exception as e:
                     logger.warn(e)
                     # raise e

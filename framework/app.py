@@ -15,7 +15,7 @@ class App():
         self.id = _path.parent.name
         self.path = str(_path.absolute().parent) + '/'
         self.routes: typing.List[Route] = []
-        self.routes.append(Mount('/static', app=StaticFiles(directory=self.path+'templates/static', check_dir=False), name='static'))
+        self.routes.append(Mount('/static', app=StaticFiles(directory=self.path+'static', check_dir=False), name=self.id+'/static'))
         self.config = Config('.config')
         self.registry = registry
         self.registry['apps'][self.id] = self
