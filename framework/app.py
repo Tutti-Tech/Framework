@@ -12,13 +12,13 @@ class App():
 
     def __init__(self, path) -> None:
         _path = Path(path)
-        self.id = _path.parent.name
+        self.name = _path.parent.name
         self.path = str(_path.absolute().parent) + '/'
         self.routes: typing.List[Route] = []
-        self.routes.append(Mount('/static', app=StaticFiles(directory=self.path+'static', check_dir=False), name=self.id+'/static'))
+        self.routes.append(Mount('/static', app=StaticFiles(directory=self.path+'static', check_dir=False), name=self.name+'/static'))
         self.config = Config('.config')
         self.registry = registry
-        self.registry['apps'][self.id] = self
+        self.registry['apps'][self.name] = self
     
     def route(
         self,
